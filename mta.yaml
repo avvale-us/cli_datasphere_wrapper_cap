@@ -1,0 +1,37 @@
+_schema-version: '3.1'
+ID: cli_datasphere_wrapper_cap
+version: 1.0.0
+description: "App to run Datasphere CLI - Start Task Chain"
+parameters:
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm ci
+        - npx cds build --production
+modules:
+  - name: cli_datasphere_wrapper_cap-srv
+    type: nodejs
+    path: gen/srv
+    parameters:
+      buildpack: nodejs_buildpack
+    build-parameters:
+      builder: npm
+    provides:
+      - name: srv-api
+        properties:
+          srv-url: ${default-url}
+    requires:
+      - name: cli_datasphere_wrapper_cap-auth
+
+resources:
+  - name: cli_datasphere_wrapper_cap-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json
+      config:
+        xsappname: cli_datasphere_wrapper_cap-${org}-${space}
+        tenant-mode: dedicated

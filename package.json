@@ -1,0 +1,40 @@
+{
+  "name": "cli_datasphere_wrapper_cap",
+  "version": "1.0.0",
+  "description": "CAP API wrapper for SAP Datasphere CLI",
+  "repository": "<Add your repository here>",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@sap/cds": "^8",
+    "@sap/datasphere-cli": "2026.4.0",
+    "@sap/xsenv": "^6.1.0",
+    "@sap/xssec": "^4",
+    "express": "^4",
+    "passport": "^0.7.0"
+  },
+  "devDependencies": {
+    "mbt": "^1"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "build": "mbt build",
+    "deploy": "cf deploy mta_archives/cli_datasphere_wrapper_cap_1.0.0.mtar",
+    "build:deploy": "mbt build && cf deploy mta_archives/cli_datasphere_wrapper_cap_1.0.0.mtar"
+  },
+  "cds": {
+    "server": {
+      "port": 4004
+    },
+    "requires": {
+      "auth": {
+        "kind": "dummy"
+      },
+      "[production]": {
+        "auth": {
+          "kind": "xsuaa"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,54 @@
+### VS Code REST Client Test Examples
+### Ensure your application is running at http://localhost:4004
+
+@server = http://localhost:4004
+@auth = Authorization: Basic any:any
+
+### 1. Retrieve Current Server Host Configuration
+GET {{server}}/odata/v4/datasphere-cli/getHost()
+{{auth}}
+
+### 2. Update the Target Datasphere Host
+POST {{server}}/odata/v4/datasphere-cli/updateHost
+Content-Type: application/json
+{{auth}}
+
+{
+    "new_host": "https://my-datasphere-tenant.eu10.hcs.cloud.sap"
+}
+
+### 3. Retrieve Configured Secrets
+GET {{server}}/odata/v4/datasphere-cli/getSecrets()
+{{auth}}
+
+### 4. Update the Datasphere Credentials (Secrets)
+POST {{server}}/odata/v4/datasphere-cli/updateSecrets
+Content-Type: application/json
+{{auth}}
+
+{
+    "payload": {
+        "client_id": "YOUR_CLIENT_ID",
+        "client_secret": "YOUR_CLIENT_SECRET",
+        "token_url": "YOUR_TOKEN_URL"
+    }
+}
+
+### 5. Run a Task Chain in a specific space
+POST {{server}}/odata/v4/datasphere-cli/runTaskChain
+Content-Type: application/json
+{{auth}}
+
+{
+    "space": "MY_TARGET_SPACE",
+    "object": "MY_TASK_CHAIN_NAME"
+}
+
+### 6. Get Execution Logs for an object
+GET {{server}}/odata/v4/datasphere-cli/getLogs(space='MY_TARGET_SPACE',object='MY_TASK_CHAIN_NAME')
+{{auth}}
+
+### 7. Get Details of a specific Log
+# Notice the info_level can be 'status', 'all', 'messages' etc.
+GET {{server}}/odata/v4/datasphere-cli/getLogDetails(space='MY_TARGET_SPACE',log_id='LOG_ID_FROM_GET_LOGS',info_level='status')
+{{auth}}
